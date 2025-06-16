@@ -1,0 +1,112 @@
+# Prepare the ZIP of the motivational quote site to upload to GitHub and make it deployable
+from zipfile import ZipFile
+import os
+
+# Define folder and files
+folder_path = "/mnt/data/motivate_me_daily_site"
+os.makedirs(folder_path, exist_ok=True)
+file_path = os.path.join(folder_path, "index.html")
+
+html_code = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MotivateMe Daily</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to right, #f9f9f9, #e0f7fa);
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem;
+      text-align: center;
+    }
+    h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+    #quote-box {
+      background-color: #ffffff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+    }
+    #quote { font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem; }
+    #author { font-size: 1rem; color: #666; margin-bottom: 1.5rem; }
+    button {
+      padding: 0.75rem 1.5rem;
+      background-color: #00bcd4;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+    button:hover { background-color: #0097a7; }
+    .affiliate-section { margin-top: 3rem; }
+    .affiliate-section h2 { margin-bottom: 1rem; }
+    .affiliate-links a {
+      display: inline-block;
+      margin: 0.5rem;
+      color: #00796b;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .affiliate-links a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <h1>MotivateMe Daily</h1>
+  <div id="quote-box">
+    <p id="quote">Loading quote...</p>
+    <p id="author"></p>
+    <button onclick="generateQuote()">New Quote</button>
+  </div>
+
+  <div class="affiliate-section">
+    <h2>Tools That Changed My Life</h2>
+    <div class="affiliate-links">
+      <a href="https://amzn.to/YOUR-LINK" target="_blank">Daily Journal (Amazon)</a>
+      <a href="https://blinkist.o6eiov.net/YOUR-LINK" target="_blank">Blinkist (Self-Help Books)</a>
+      <a href="https://affiliate.udemy.com/YOUR-LINK" target="_blank">Top Udemy Courses</a>
+    </div>
+  </div>
+
+  <script>
+    const quotes = [
+      { quote: "Believe you can and you're halfway there.", author: "Theodore Roosevelt" },
+      { quote: "Your time is limited, so don’t waste it living someone else’s life.", author: "Steve Jobs" },
+      { quote: "Success is not final, failure is not fatal: It is the courage to continue that counts.", author: "Winston Churchill" },
+      { quote: "Start where you are. Use what you have. Do what you can.", author: "Arthur Ashe" },
+      { quote: "The only limit to our realization of tomorrow is our doubts of today.", author: "Franklin D. Roosevelt" }
+    ];
+
+    function generateQuote() {
+      const random = quotes[Math.floor(Math.random() * quotes.length)];
+      document.getElementById("quote").innerText = `"${random.quote}"`;
+      document.getElementById("author").innerText = `— ${random.author}`;
+    }
+
+    generateQuote();
+  </script>
+</body>
+</html>
+"""
+
+# Write the HTML file
+with open(file_path, "w") as f:
+    f.write(html_code)
+
+# Zip the folder
+zip_path = "/mnt/data/motivate_me_daily_site.zip"
+with ZipFile(zip_path, "w") as zipf:
+    zipf.write(file_path, arcname="index.html")
+
+zip_path  # return the ZIP path for user to download and upload to GitHub/Vercel directly
